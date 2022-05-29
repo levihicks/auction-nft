@@ -75,7 +75,9 @@ contract AuctionHouse {
         address previousTopBidder = auctions[currentAuctionId].topBidder;
         auctions[currentAuctionId].topBid = msg.value;
         auctions[currentAuctionId].topBidder = msg.sender;
-        (bool sent, ) = previousTopBidder.call{value: previousTopBid}("");
-        require(sent, "Failed to send Ether");
+        if (previousTopBidder != address(0)) {
+            (bool sent, ) = previousTopBidder.call{value: previousTopBid}("");
+            require(sent, "Failed to send Ether");
+        }
     }
 }
